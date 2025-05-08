@@ -1,7 +1,5 @@
 #!/bin/bash
-set -e
-echo "Starting PostgreSQL..."
-ssh postgres@postgres  "/usr/lib/postgresql/16/bin/pg_ctl -D /var/lib/postgresql/16/main -l /var/log/postgresql/postgresql.log -o '-c config_file=/etc/postgresql/16/main/postgresql.conf' start" || {
-    echo "Failed to start PostgreSQL"
-    exit 1
-}
+
+docker start pg
+
+while [ "`docker inspect -f {{.State.Health.Status}} pg`" != "healthy" ]; do     sleep 2; done
